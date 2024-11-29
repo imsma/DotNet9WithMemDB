@@ -1,8 +1,12 @@
+using DotNet9WithMemDB.DB;
+using DotNet9WithMemDB.web.api;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<ToDoDb>(options => options.UseInMemoryDatabase("todos"));
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo {
         Title = "ToDo API",
@@ -21,5 +25,6 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.MapGet("/", () => "Hello World!");
+app.MapToDoEndpoints();
 
 app.Run();
